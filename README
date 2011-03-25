@@ -1,0 +1,93 @@
+Rgraph
+======
+
+RGraph is a Rails widget to help you put one chart in your views. I've development  the different classes and methods to obtain a chart in HTML5 (Currently, Line and Meter) . This plugin works with RGraph: HTML5 canvas graph library (http://www.rgraph.net).
+
+url's:
+- Forum about RGraph: http://www.rgraph.net/docs/index.html#support 
+- API Documentation: http://www.rgraph.net/docs/api.html 
+
+Example
+=======
+
+In Controller
++++++++++++++++++++++
+
+#This method includes an action in the controller to obtain a CSV file with data of a chart.
+rgraph_includes
+
+def index
+
+	# Make a Meter chart and set the different parameters.
+	# You can set any parameter and get his value with get_method.
+	
+  a = Rgraph::Meter.new
+  a.min = 10
+  a.max = 100
+  a.green_interval(10,50)
+  a.yellow_interval(50,60)
+  a.red_interval(60,100)
+  a.value = 80
+  a.set_title("Graph 1")
+  
+  @meter = rgraph_object_and_div(300,200, a)
+  
+  @line = Rgraph::Line.new
+  @line.values = [[12, 23, 34, 56]]
+  @line.chart_labels = [2000, 2001, 2002, 2003]
+  @line.show_regression = true
+  @line.calculate_regression
+  @line.generate_tooltips
+  @line.chart_annotatable = true
+  @line.chart_key = ['Users']
+  
+  @lines = rgraph_object_and_div_and_csv(300, 200, @line)
+
+end
+
+In view (index.rhtml)
++++++++++++++++++++++++
+
+<html>
+<head>
+	<title>Test</title>
+
+ 	<%= rgraph_includes (["meter.js", "line.js"])%>
+ 
+</head>
+
+<body>
+
+	<p>Chart with a meter format</p>
+	<%= @meter[1] %>
+	
+	<br/>
+	
+	<p>Chart with a line format</p>
+	<%= rgraph_get_csv_file(@lines[2]) %>
+	<%= @lines[1] %>
+
+	<br/>
+	
+</body>
+
+</html>
+
++++++++++++++++++++++++++++++++++++
+
+The method rgraph_includes generates the includes of javascript necessary to work correctly with RGraph. You can use the rgraph_get_csv_file method to get the data of a chart in a csv file.
+
+
+
+
+Dependencies
+============
+
+You need to install the following gems:
+
+gem install statsample
+gem install htmlentities
+gem install fastercsv
+
+
+Copyright (c) 2011 Ramón Pérez Pérez, released under the MIT license
