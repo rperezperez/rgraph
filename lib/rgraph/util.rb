@@ -38,19 +38,21 @@ module Rgraph
       return max
     end
     
-    def self.next_not_null(values, i)
+    def self.next_not_null(values, j)
+      i = j
       total = values.length
       while i < total
-        return values[i] if values[i] != nil
+        return [i, values[i]] if values[i] != nil
         i += 1
       end
       return nil
     end
 
-    def self.previous_not_null(values, i)      
-      while i > 0
-        return values[i] if values[i] != nil
-        i -= 1
+    def self.previous_not_null(values, j)
+      i = j      
+      while i >= 0
+        return [i, values[i]] if values[i] != nil
+        i -= 1        
       end
       return nil
     end
@@ -59,22 +61,35 @@ module Rgraph
     #this method replace the nil values with an interpolate value with his extremes.
     def self.interpolate_nil_values(values)
 
+      puts "Valores. #{values}"
+      
       i = 0
       total = values.length
       output = []
 
       while i < total
+        
         if values[i] != nil or (i == 0) or (i == (total-1))
           output << values[i]
         else
           previous_value = previous_not_null(values, i-1)
-          next_value = next_not_null(values, i+1)
+          puts "Previo: "+previous_value.inspect.to_s
+          next_value = next_not_null(values, i+1)          
+          puts "Next: "+next_value.inspect.to_s
+
           if next_value != nil and previous_value != nil
-            output << (values[i+1]-output[i-1])/2.0 + previous_value
+            #make a regression line with values
+            aux_val = values[previous_value[0]..next_value[0]]
+            puts "Aux val: #{aux_val.inspect.to_s}"
+            line = Rgraph::Util.regression_simple(aux_val)
+            puts "linea: "+line[1].inspect.to_s  
+            puts "Value: #{line[1][i-previous_value[0]]} Posicion #{i-previous_value[0]}"         
+            output << line[1][i-previous_value[0]]
           else
             output << nil
           end                
         end
+        
         i+= 1
       end
       
