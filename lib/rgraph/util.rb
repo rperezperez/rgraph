@@ -73,17 +73,12 @@ module Rgraph
           output << values[i]
         else
           previous_value = previous_not_null(values, i-1)
-          puts "Previo: "+previous_value.inspect.to_s
           next_value = next_not_null(values, i+1)          
-          puts "Next: "+next_value.inspect.to_s
 
           if next_value != nil and previous_value != nil
             #make a regression line with values
             aux_val = values[previous_value[0]..next_value[0]]
-            puts "Aux val: #{aux_val.inspect.to_s}"
             line = Rgraph::Util.regression_simple(aux_val)
-            puts "linea: "+line[1].inspect.to_s  
-            puts "Value: #{line[1][i-previous_value[0]]} Posicion #{i-previous_value[0]}"         
             output << line[1][i-previous_value[0]]
           else
             output << nil

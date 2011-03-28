@@ -32,10 +32,11 @@ module Rgraph
     def get_csv
       salida = []
       if @values != nil
-
+        values = @values
+        values = [values] if values.first.class.to_s != "Array"        
         salida << ['', @chart_labels].flatten
         i = 0
-        for v in @values
+        for v in values
           salida << [(@chart_key[i] if i < @chart_key.length) || '', v].flatten
           i += 1
         end
