@@ -40,7 +40,13 @@ module Rgraph
         
         salida << l_r.get_construct(id+"_r", canvas_id)
         salida << l_r.config(id+"_r", canvas_id, true)
-        salida << "var #{self.id(id)} = new RGraph.Line('#{canvas_id}', #{self.get_values.inspect.to_s});"
+        if @interpolate_nil_values
+          i_values = Rgraph::Util.interpolate_nil_values(self.get_values)
+        else
+          i_values = self.get_values
+        end
+        
+        salida << "var #{self.id(id)} = new RGraph.Line('#{canvas_id}', #{i_values.to_json});"
         
       end
       
@@ -51,10 +57,16 @@ module Rgraph
       colors = self.get_chart_fillstyle
       lines = self.get_chart_colors
       for v in values
-        if i == 0
-          salida << "var #{self.id(id)} = new RGraph.Line('#{canvas_id}', #{v.inspect.to_s});"
+        if @interpolate_nil_values
+          i_v = Rgraph::Util.interpolate_nil_values(v)
         else
-          salida << "var #{self.id(id)}_#{i} = new RGraph.Line('#{canvas_id}', #{v.inspect.to_s});"
+          i_v = v
+        end
+
+        if i == 0
+          salida << "var #{self.id(id)} = new RGraph.Line('#{canvas_id}', #{i_v.to_json});"
+        else
+          salida << "var #{self.id(id)}_#{i} = new RGraph.Line('#{canvas_id}', #{i_v.to_json});"
           self.chart_fillstyle = colors[i]
           self.chart_colors = [lines[i]]
           salida << self.config(id+"_"+i.to_s, canvas_id, true)

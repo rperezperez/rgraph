@@ -1,7 +1,7 @@
-Rgraph
-======
+Ruby plugin for Rgraph
+========================
 
-RGraph is a Rails widget to help you put one chart in your views. I've development  the different classes and methods to obtain a chart in HTML5 (Currently, Line and Meter) . This plugin works with RGraph: HTML5 canvas graph library (http://www.rgraph.net).
+This is a Rails widget to help you put one chart in your views. I've development the different classes and methods to obtain a chart in HTML5 (Currently, Line and Meter). This plugin works with RGraph: HTML5 canvas graph library (http://www.rgraph.net).
 
 url's:
 - Forum about RGraph: http://www.rgraph.net/docs/index.html#support 
@@ -33,13 +33,14 @@ def index
   @meter = rgraph_object_and_div(300,200, a)
   
   @line = Rgraph::Line.new
-  @line.values = [[12, 23, 34, 56]]
+  @line.values = [[12, nil, 34, 56]]
   @line.chart_labels = [2000, 2001, 2002, 2003]
   @line.show_regression = true
   @line.calculate_regression
   @line.generate_tooltips
   @line.chart_annotatable = true
   @line.chart_key = ['Users']
+  @line.interpolate_nil_values = true
   
   @lines = rgraph_object_and_div_and_csv(300, 200, @line)
 
@@ -88,6 +89,13 @@ You need to install the following gems:
 gem install statsample
 gem install htmlentities
 gem install fastercsv
+
+Changelog
+========================
+
++++++++++++ 0.1  +++++++++++
+- New function to interpolate nil values
+- fixed
 
 
 Copyright (c) 2011 Ramón Pérez Pérez, released under the MIT license

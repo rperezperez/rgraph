@@ -283,6 +283,8 @@
     RGraph.ClearAnnotations = function (id)
     {
         var canvas = document.getElementById(id);
+		if (canvas == null)
+			return;
         var obj    = canvas.__object__;
 
         if (window.localStorage && window.localStorage['__rgraph_annotations_' + id + '__'] && window.localStorage['__rgraph_annotations_' + id + '__'].length) {

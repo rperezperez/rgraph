@@ -33,9 +33,52 @@ module Rgraph
       return nil if values == nil
       
       max = values.first
-      values.map{|x| max = x if max < x}
+      values.map{|x| max = x if x != nil and max < x}
       
       return max
+    end
+    
+    def self.next_not_null(values, i)
+      total = values.length
+      while i < total
+        return values[i] if values[i] != nil
+        i += 1
+      end
+      return nil
+    end
+
+    def self.previous_not_null(values, i)      
+      while i > 0
+        return values[i] if values[i] != nil
+        i -= 1
+      end
+      return nil
+    end
+
+    
+    #this method replace the nil values with an interpolate value with his extremes.
+    def self.interpolate_nil_values(values)
+
+      i = 0
+      total = values.length
+      output = []
+
+      while i < total
+        if values[i] != nil or (i == 0) or (i == (total-1))
+          output << values[i]
+        else
+          previous_value = previous_not_null(values, i-1)
+          next_value = next_not_null(values, i+1)
+          if next_value != nil and previous_value != nil
+            output << (values[i+1]-output[i-1])/2.0 + previous_value
+          else
+            output << nil
+          end                
+        end
+        i+= 1
+      end
+      
+      output
     end
         
   end

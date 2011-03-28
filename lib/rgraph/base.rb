@@ -97,7 +97,7 @@ module Rgraph
       values = @values
       values = [@values] if @values.first.class.to_s != "Array"
 
-      for v in @values
+      for v in values
         #Calculamos la linea de regresion para cada vector
         l_r = Rgraph::Util.regression_simple(v)          
         @regression_values << l_r[1]

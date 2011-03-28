@@ -2497,7 +2497,8 @@ if (typeof(obj.Get('chart.scale.formatter')) == 'function') {
                 if (el[0].substring(0, 7) == 'window_') {
                     window.removeEventListener(el[1], el[2], false);
                 } else {
-                    document.getElementById(id).removeEventListener(el[1], el[2], false);
+					if (document.getElementById(id) != null)
+                    	document.getElementById(id).removeEventListener(el[1], el[2], false);
                 }
                 
                 RGraph.Registry.Get('chart.event.handlers')[i] = null;
